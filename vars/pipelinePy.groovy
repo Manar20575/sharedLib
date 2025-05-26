@@ -1,32 +1,39 @@
 #!/usr/bin/env groovy
 
 def call() {
-    node {
-        def imageName = 'manar564/python'
-        def tag = 'latest'
+    pipeline {
+        agent any
         
-        stage('Checkout') {
-            checkout scm
-        }
-        
-        stage('Build Docker Image') {
-            script {
-                sh """
-                    docker build -t ${imageName}:${tag} .
-                """
+        stages {
+            stage('Checkout') {
+                steps {
+                    checkout scm
+                }
             }
-        }
-
-        stage('Push Image to Dockerhub') {
-            script {
-                withCredentials([usernamePassword(credentialsId: 'dockerhub', 
-                                                usernameVariable: 'DOCKERHUB_USERNAME',
-                                                passwordVariable: 'DOCKERHUB_PASSWORD')]) {
-                    sh """
-                        echo \$DOCKER_PASSWORD | docker login -u \$DOCKER_USERNAME --password-stdin
-                        docker push ${imageName}:${tag}
-                        docker logout
-                    """
+            
+            stage('Build Docker Image') {
+                steps {
+                    script {
+                        sh "docker build -t manar564/python:latest ."
+                    }
+                }
+            }
+            
+            stage('Push Image to Dockerhub') {
+                steps {
+                    script {
+                        withCredentials([usernamePassword(
+                            credentialsId: 'dockerhub',
+                            usernameVariable: 'DOCKERHUB_USERNAME',
+                            passwordVariable: 'DOCKERHUB_PASSWORD'
+                        )]) {
+                            sh '''
+                                docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
+                                docker push manar564/python:latest
+                                docker logout
+                            '''
+                        }
+                    }
                 }
             }
         }
