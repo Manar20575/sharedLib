@@ -20,7 +20,6 @@ class Docker implements Serializable {
     }
 }
 
-
 // package org.iti;
 
 // def login(USERNAME, PASSWORD){

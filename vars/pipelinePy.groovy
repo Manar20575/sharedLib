@@ -1,7 +1,5 @@
-import org.iti.*
-
 def call(Map config = [:]) {
-    def dockerT1 = new Docker(this)
+    def dockerT1 = new org.iti.Docker(this)
     
     node('java') {
         stage('Checkout') {
