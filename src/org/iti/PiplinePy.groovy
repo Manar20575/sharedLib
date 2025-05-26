@@ -22,6 +22,7 @@ def call() {
                 steps{
                     script{
                         javax.build()
+                        sh 'pwd'
                     }
                 }
             }
