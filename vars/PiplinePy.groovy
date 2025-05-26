@@ -1,6 +1,6 @@
 #!/usr/bin/env groovy
 
-def call(Map config = [:]) {
+def piplinePy(Map config = [:]) {
     def dockerT1 = new org.iti.Docker(this)
     
     node('java') {
