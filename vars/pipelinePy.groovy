@@ -1,5 +1,13 @@
 #!/usr/bin/env groovy
+#!/usr/bin/env groovy
 
+def call(Map config = [:]) {
+    node('java') {
+        stage('Test Stage') {
+            echo "Testing shared library"
+        }
+    }
+}
 def pipelinePy(Map config = [:]) {
     def dockerT1 = new org.iti.Docker(this)
     node('java') {
