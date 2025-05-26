@@ -1,4 +1,5 @@
-def dockerT1 = new org.iti.docker()
+def call(){
+    def dockerT1 = new org.iti.docker()
 
 pipeline{
     agent{
@@ -41,3 +42,5 @@ pipeline{
 //         }
 
 // }
+
+}
