@@ -1,13 +1,8 @@
-#!/usr/bin/env groovy
+import org.iti.*
+
 def call(Map config = [:]) {
-    node('java') {
-        stage('Test Stage') {
-            echo "Testing shared library"
-        }
-    }
-}
-def pipelinePy(Map config = [:]) {
-    def dockerT1 = new org.iti.Docker(this)
+    def dockerT1 = new Docker(this)
+    
     node('java') {
         stage('Checkout') {
             checkout scm
