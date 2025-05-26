@@ -6,7 +6,7 @@ class Docker implements Serializable {
     Docker(script) {
         this.script = script
     }
-
+    
     def login(USERNAME, PASSWORD){
         script.sh "docker login -u ${USERNAME} -p ${PASSWORD}"
     }
