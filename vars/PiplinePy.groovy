@@ -1,3 +1,4 @@
+#!/usr/bin/env groovy
 def call(Map config = [:]) {
     def dockerT1 = new org.iti.Docker(this)
     pipeline {
