@@ -1,27 +1,7 @@
 def call(Map config = [:]) {
-    def docker = load "src/org/iti/Docker.groovy"
-    def dockerT1 = docker.new(this)
-    
     node('java') {
-        stage('Checkout') {
-            checkout scm
-        }
-        
-        withCredentials([
-            usernamePassword(
-                credentialsId: 'dockerhub-user',
-                usernameVariable: 'DOCKER_USER',
-                passwordVariable: 'DOCKER_PASS'
-            )
-        ]) {
-            stage("Build Docker Image") {
-                dockerT1.build("${DOCKER_USER}/python", "${BUILD_NUMBER}")
-            }
-            
-            stage("Push Docker Image") {
-                dockerT1.login("${DOCKER_USER}", "${DOCKER_PASS}")
-                dockerT1.push("${DOCKER_USER}/python", "${BUILD_NUMBER}")
-            }
+        stage('Test') {
+            echo "Testing shared library"
         }
     }
 }
