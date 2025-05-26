@@ -1,46 +1,43 @@
-def call() {
-    pipeline{
-        agent {
-            label 'java'
-        }
+def dockerT1 = new org.iti.docker()
 
-        tools{
-            jdk "java-8"
-        }
-
-        environment{
-            DOCKER_USER = credentials('dockerhub-user')
-            DOCKER_PASS = credentials('docker-pass')
-        }
-
+pipeline{
+    agent{
+        label "java"
+    }
+    environment{
+        DOCKER_USER = credentials('dockerhub-user')
+        DOCKER_PASS = credentials('docker-pass')
+    }
         parameters {
-            string defaultValue: '${BUILD_NUMBER}', description: 'the version of the docker image', name: 'VERSION'
+        string defaultValue: '${BUILD_NUMBER}', description: 'Current Image Version', name: 'VERSION'
+    }
+    stages{
+        stage("build Docker image"){
+            steps{
+                script{
+                dockerT1.build("${DOCKER_USER}/python", "${VERSION}")
+                }
+            }
         }
-
-        stages{
-            stage("Build java app"){
-                steps{
-                    script{
-                        javax.build()
-                        sh 'pwd'
-                    }
-                }
-            }
-            stage("build java app image"){
-                steps{
-                    script{
-                        dockerx.build("${DOCKER_USER}/java", "${VERSION}")
-                    }
-                }
-            }
-            stage("push java app image"){
-                steps{
-                    script{
-                        dockerx.login("${DOCKER_USER}", "${DOCKER_PASS}")
-                        dockerx.push("${DOCKER_USER}/java", "${DOCKER_PASS}")
-                    }
-                }
+        stage("Push Docker image"){
+            steps{
+                script{
+                    dockerT1.login("${DOCKER_USER}", "${DOCKER_PASS}")
+                    dockerT1.push("${DOCKER_USER}/python", "${VERSION}")
+                }            
             }
         }
     }
 }
+
+// node('java'){
+//     checkout scm
+//     stage('build Docker image'){
+//         sh "pwd && ls"
+//         sh "docker build -t manar564/data-it:v${BUILD_NUMBER} ."
+//     }
+//     stage("Push Docker image"){
+//         sh "docker push manar564/data-it:v${BUILD_NUMBER}"
+//         }
+
+// }
