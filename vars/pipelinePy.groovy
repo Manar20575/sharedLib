@@ -1,6 +1,6 @@
 #!/usr/bin/env groovy
 def call() {
-    def dockerT1 = new org.iti.Docker()
+    def dockerT1 = new org.iti.Docker(this)
     pipeline {
         agent {
             label "java"
