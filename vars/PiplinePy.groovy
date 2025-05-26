@@ -1,8 +1,13 @@
 #!/usr/bin/env groovy
+
 def call(Map config = [:]) {
     def dockerT1 = new org.iti.Docker(this)
     
     node('java') {
+        stage('Checkout') {
+            checkout scm
+        }
+        
         withCredentials([
             usernamePassword(
                 credentialsId: 'dockerhub-user', 
