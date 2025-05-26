@@ -1,5 +1,4 @@
 #!/usr/bin/env groovy
-
 def pipelinePy(Map config = [:]) {
     def dockerT1 = new org.iti.Docker(this)
     
@@ -10,8 +9,8 @@ def pipelinePy(Map config = [:]) {
         
         withCredentials([
             usernamePassword(
-                credentialsId: 'dockerhub-user', 
-                usernameVariable: 'DOCKER_USER', 
+                credentialsId: 'dockerhub-user',
+                usernameVariable: 'DOCKER_USER',
                 passwordVariable: 'DOCKER_PASS'
             )
         ]) {
@@ -26,7 +25,6 @@ def pipelinePy(Map config = [:]) {
         }
     }
 }
-
 // def call(Map config = [:]) {
 //     def dockerT1 = new org.iti.Docker(this)
 //     pipeline {
