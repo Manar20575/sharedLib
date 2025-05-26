@@ -16,10 +16,12 @@ def call() {
                 """
             }
         }
-        
+
         stage('Push Image to Dockerhub') {
             script {
-                withCredentials([usernamePassword(credentialsId: 'dockerhub')]) {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', 
+                                                usernameVariable: 'DOCKERHUB_USERNAME',
+                                                passwordVariable: 'DOCKERHUB_PASSWORD')]) {
                     sh """
                         echo \$DOCKER_PASSWORD | docker login -u \$DOCKER_USERNAME --password-stdin
                         docker push ${imageName}:${tag}
