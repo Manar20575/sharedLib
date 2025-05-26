@@ -1,5 +1,7 @@
 def call(Map config = [:]) {
-    def dockerT1 = new org.iti.Docker(this)
+    // Load the Docker class explicitly
+    def docker = load "src/org/iti/Docker.groovy"
+    def dockerT1 = docker.new(this)
     
     node('java') {
         stage('Checkout') {
