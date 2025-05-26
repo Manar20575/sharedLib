@@ -1,6 +1,4 @@
 #!/usr/bin/env groovy
-#!/usr/bin/env groovy
-
 def call(Map config = [:]) {
     node('java') {
         stage('Test Stage') {
