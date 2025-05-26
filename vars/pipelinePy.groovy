@@ -17,11 +17,11 @@ def call() {
             }
         }
         
-        stage('Push to Registry') {
+        stage('Push Image to Dockerhub') {
             script {
                 withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', 
-                                                passwordVariable: 'DOCKER_PASSWORD', 
-                                                usernameVariable: 'DOCKER_USERNAME')]) {
+                                                passwordVariable: 'docker-pass', 
+                                                usernameVariable: 'dockerhub-user')]) {
                     sh """
                         echo \$DOCKER_PASSWORD | docker login -u \$DOCKER_USERNAME --password-stdin
                         docker push ${imageName}:${tag}
