@@ -1,26 +1,23 @@
-def call(Map config = [:]) {
-    def docker = load "src/org/iti/Docker.groovy"
-    def dockerT1 = docker.new(this)
-    
-    node('java') {
+#!/usr/bin/env groovy
+
+def call(Map config) {
+    node {
         stage('Checkout') {
             checkout scm
         }
         
-        withCredentials([
-            usernamePassword(
-                credentialsId: 'dockerhub-user',
-                usernameVariable: 'DOCKER_USER',
-                passwordVariable: 'DOCKER_PASS'
-            )
-        ]) {
-            stage("Build Docker Image") {
-                dockerT1.build("${DOCKER_USER}/python", "${BUILD_NUMBER}")
+        stage('Build Docker Image') {
+            script {
+                def dockerImage = docker.build("${config.imageName}:${config.tag}")
             }
-            
-            stage("Push Docker Image") {
-                dockerT1.login("${DOCKER_USER}", "${DOCKER_PASS}")
-                dockerT1.push("${DOCKER_USER}/python", "${BUILD_NUMBER}")
+        }
+        
+        stage('Push to Registry') {
+            script {
+                docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
+                    def dockerImage = docker.image("${config.imageName}:${config.tag}")
+                    dockerImage.push()
+                }
             }
         }
     }
