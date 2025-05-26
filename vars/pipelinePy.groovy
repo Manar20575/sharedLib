@@ -1,22 +1,34 @@
 #!/usr/bin/env groovy
 
-def call(Map config) {
+#!/usr/bin/env groovy
+
+def call() {
     node {
+        def imageName = 'manar564/python'
+        def tag = 'latest'
+        
         stage('Checkout') {
             checkout scm
         }
         
         stage('Build Docker Image') {
             script {
-                def dockerImage = docker.build("${config.imageName}:${config.tag}")
+                sh """
+                    docker build -t ${imageName}:${tag} .
+                """
             }
         }
         
         stage('Push to Registry') {
             script {
-                docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
-                    def dockerImage = docker.image("${config.imageName}:${config.tag}")
-                    dockerImage.push()
+                withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', 
+                                                passwordVariable: 'DOCKER_PASSWORD', 
+                                                usernameVariable: 'DOCKER_USERNAME')]) {
+                    sh """
+                        echo \$DOCKER_PASSWORD | docker login -u \$DOCKER_USERNAME --password-stdin
+                        docker push ${imageName}:${tag}
+                        docker logout
+                    """
                 }
             }
         }
