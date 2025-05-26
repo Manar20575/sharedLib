@@ -1,4 +1,7 @@
 def call() {
+    def dockerx = new org.iti.Docker(this)
+    def javax = new org.iti.java(this)
+    
     pipeline{
         agent {
             label 'java'
